@@ -79,14 +79,14 @@ import java.util.TreeMap;
                         " return `\"A,B,S,C,A\"` as the output",
                         syntax = "from InputStream#window.time(5 min)\n" +
                                 "select str:groupConcat(\"key\") as groupedKeys\n" +
-                                "input OutputStream;"),
+                                "insert into OutputStream;"),
                 @Example(description = "This returns a string that is the result of the " +
                         "concatenated keys separated by the given separator. \n" +
                         "When we send events having values for the `key` `'A'`, `'B'`, `'S'`, `'C'`, `'A'` it will" +
                         " return `\"A-B-C-S\"` as the output",
                         syntax = "from InputStream#window.time(5 min)\n" +
                                 "select groupConcat(\"key\",\"-\",true,\"ASC\") as groupedKeys\n" +
-                                "input OutputStream;")
+                                "insert into OutputStream;")
         }
 
 )
@@ -158,13 +158,13 @@ public class GroupConcatFunctionExtension extends AttributeAggregator {
 
     @Override
     public Object processAdd(Object o) {
-        addString((String) o);
+        addString(String.valueOf(o));
         return constructConcatString(",");
     }
 
     @Override
     public Object processAdd(Object[] objects) {
-        addString((String) objects[0]);
+        addString(String.valueOf(objects[0]));
         return constructConcatString((String) objects[1]);
     }
 
